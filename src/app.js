@@ -7,35 +7,40 @@ import adoptionsRouter from './routes/adoption.router.js';
 import sessionsRouter from './routes/sessions.router.js';
 import mocksRouter from './routes/mocks.router.js';
 import dotenv from 'dotenv';
-import configureSwagger  from './utils/swaggerConfig.js';
+import configureSwagger from './utils/swaggerConfig.js';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT
 
-const isTestEnv = process.env.NODE_ENV === 'test';
-const dbURI = isTestEnv ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI;
+const uri = process.env.NODE_ENV === 'test'
+    ? process.env.MONGODB_TEST_URI
+    : process.env.MONGODB_URI;
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-        console.log(`Conexión a MongoDB establecida en ${isTestEnv ? 'modo test' : 'producción'}`);
-        app.listen(PORT, () => {
-            console.log(`Server is running on port ${PORT}`);
-        });
-    })
-    .catch(error => {
-        console.error('Error al conectar a MongoDB:', error);
-        process.exit(1);
-    });
+console.log('NODE_ENV:', process.env.NODE_ENV);
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log(`Conexión a MongoDB establecida en ${process.env.NODE_ENV}`))
+    .catch(err => console.error('Error conectándose a MongoDB:', err));
+
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.get('/', (req, res) => {
+    res.send('Servidor funcionando');
+});
 
 app.use('/api/users', usersRouter);
 app.use('/api/pets', petsRouter);
 app.use('/api/adoptions', adoptionsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocks', mocksRouter);
-configureSwagger (app);
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Algo salió mal!');
+});
+
+configureSwagger(app);
 export default app;
