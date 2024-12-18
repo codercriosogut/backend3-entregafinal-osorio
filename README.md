@@ -285,4 +285,32 @@ El proyecto utiliza las siguientes dependencias clave:
 
 ##
 <a href="#title">Volver al inicio</a>
+
 ##
+#
+## Docker ##
+
+### Docker Desktop - Cargar imagen
+```bash
+docker build -t docker_cristian .
+docker run -p 8080:8080 docker_cristian
+```
+#
+### DockerHub - Subir la imagen a dockerhub
+```bash
+docker login
+docker tag docker_cristian criosogutdocker/docker_cristian:ver1
+docker push criosogutdocker/docker_cristian:ver1
+```
+#
+### Public
+- https://hub.docker.com/r/criosogutdocker/docker_cristian
+
+
+
+### Swagger
+```bash
+npm install swagger-jsdoc swagger-ui-express
+```
+
+
