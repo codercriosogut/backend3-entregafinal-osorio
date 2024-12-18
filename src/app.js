@@ -14,9 +14,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT
 
-mongoose.connect(process.env.MONGODB_URI)
+const isTestEnv = process.env.NODE_ENV === 'test';
+const dbURI = isTestEnv ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI;
+
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        console.log('Conexión a MongoDB establecida');
+        console.log(`Conexión a MongoDB establecida en ${isTestEnv ? 'modo test' : 'producción'}`);
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
@@ -35,3 +38,4 @@ app.use('/api/adoptions', adoptionsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocks', mocksRouter);
 configureSwagger (app);
+export default app;
