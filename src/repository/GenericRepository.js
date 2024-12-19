@@ -1,4 +1,3 @@
-
 export default class GenericRepository {
     constructor(dao) {
         this.dao = dao;

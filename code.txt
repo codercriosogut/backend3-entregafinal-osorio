@@ -31,8 +31,7 @@ package.json
     "mocha": "^10.1.0"
   }
 }
-
-
+---------------------------------------------------
 Dockerfile
 FROM node:18
 WORKDIR /app
@@ -41,14 +40,13 @@ RUN npm install
 COPY . .
 EXPOSE 8080
 CMD ["npm", "start"]
-
-
+---------------------------------------------------
 .env
 MONGODB_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal?retryWrites=true&w=majority&appName=Cluster0
 MONGODB_TEST_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal_test?retryWrites=true&w=majority&appName=Cluster0
 PORT=8080
 MOCK_USER_PASSWORD=coder123
-
+---------------------------------------------------
 src\app.js
 import express from 'express';
 import mongoose from 'mongoose';
@@ -91,8 +89,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/mocks', mocksRouter);
 configureSwagger (app);
 export default app;
-
-
+---------------------------------------------------
 src\controllers\adoptions.controller.js
 import { adoptionsService, petsService, usersService } from "../services/index.js"
 
@@ -127,9 +124,7 @@ export default {
     getAllAdoptions,
     getAdoption
 }
-
-
-
+---------------------------------------------------
 src\controllers\pets.controller.js
 import PetDTO from "../dto/Pet.dto.js";
 import { petsService } from "../services/index.js"
@@ -183,8 +178,7 @@ export default {
     deletePet,
     createPetWithImage
 }
-
-
+---------------------------------------------------
 src\controllers\sessions.controller.js
 import { usersService } from "../services/index.js";
 import { createHash, passwordValidation } from "../utils/index.js";
@@ -255,8 +249,7 @@ export default {
     unprotectedLogin,
     unprotectedCurrent
 }
-
-
+---------------------------------------------------
 src\controllers\users.controller.js
 import { usersService } from "../services/index.js"
 import { createHash } from "../utils/index.js";
@@ -372,8 +365,7 @@ export default {
     updateUser,
     createUser
 }
-
-
+---------------------------------------------------
 src\dao\Adoption.js
 import adoptionModel from "./models/Adoption.js";
 
@@ -399,8 +391,7 @@ export default class Adoption {
         return adoptionModel.findByIdAndDelete(id);
     }
 }
-
-
+---------------------------------------------------
 src\dao\Pets.dao.js
 import petModel from "./models/Pet.js";
 
@@ -426,8 +417,7 @@ export default class Pet {
         return petModel.findByIdAndDelete(id);
     }
 }
-
-
+---------------------------------------------------
 src\dao\Users.dao.js
 import userModel from "./models/User.js";
 
@@ -454,8 +444,7 @@ export default class Users {
         return userModel.findByIdAndDelete(id);
     }
 }
-
-
+---------------------------------------------------
 src\dao\models\Adoption.js
 import mongoose from "mongoose";
 
@@ -476,10 +465,7 @@ const schema = new mongoose.Schema({
 const adoptionModel = mongoose.model(collection,schema);
 
 export default adoptionModel;
-
-
-
-
+---------------------------------------------------
 src\dao\models\Pet.js
 import mongoose from 'mongoose';
 
@@ -509,9 +495,7 @@ const schema = new mongoose.Schema({
 const petModel = mongoose.model(collection,schema);
 
 export default petModel;
-
-
-
+---------------------------------------------------
 src\dao\models\User.js
 import mongoose from 'mongoose';
 
@@ -555,8 +539,7 @@ const schema = new mongoose.Schema({
 const userModel = mongoose.model(collection,schema);
 
 export default userModel;
-
-
+---------------------------------------------------
 src\dto\Pet.dto.js
 export default class PetDTO {
     static getPetInputFrom = (pet) =>{
@@ -569,8 +552,7 @@ export default class PetDTO {
         }
     }
 }
-
-
+---------------------------------------------------
 src\dto\User.dto.js
 export default class UserDTO {
     static getUserTokenFrom = (user) =>{
@@ -581,8 +563,7 @@ export default class UserDTO {
         }
     }
 }
-
-
+---------------------------------------------------
 src\repository\AdoptionRepository.js
 import GenericRepository from "./GenericRepository.js";
 
@@ -591,10 +572,8 @@ export default class AdoptionRepository extends GenericRepository {
         super(dao);
     }
 }
-
-
+---------------------------------------------------
 src\repository\GenericRepository.js
-
 export default class GenericRepository {
     constructor(dao) {
         this.dao = dao;
@@ -620,8 +599,7 @@ export default class GenericRepository {
         return this.dao.delete(id);
     }
 }
-
-
+---------------------------------------------------
 src\repository\PetRepository.js
 import GenericRepository from "./GenericRepository.js";
 
@@ -630,8 +608,7 @@ export default class PetRepository extends GenericRepository {
         super(dao);
     }
 }
-
-
+---------------------------------------------------
 src\repository\UserRepository.js
 import GenericRepository from "./GenericRepository.js";
 
@@ -648,9 +625,7 @@ export default class UserRepository extends GenericRepository{
     }
     
 }
-
-
-
+---------------------------------------------------
 src\routes\adoption.router.js
 import { Router} from 'express';
 import adoptionsController from '../controllers/adoptions.controller.js';
@@ -662,9 +637,7 @@ router.get('/:aid',adoptionsController.getAdoption);
 router.post('/:uid/:pid',adoptionsController.createAdoption);
 
 export default router;
-
-
-
+---------------------------------------------------
 src\routes\mocks.router.js
 import { Router } from 'express';
 import { generateMockPets } from '../utils/mockPets.js';
@@ -700,8 +673,7 @@ router.post('/generateData', async (req, res) => {
 });
 
 export default router;
-
-
+---------------------------------------------------
 src\routes\pets.router.js
 import { Router } from 'express';
 import petsController from '../controllers/pets.controller.js';
@@ -716,9 +688,7 @@ router.put('/:pid',petsController.updatePet);
 router.delete('/:pid',petsController.deletePet);
 
 export default router;
-
-
-
+---------------------------------------------------
 src\routes\sessions.router.js
 import { Router } from 'express';
 import sessionsController from '../controllers/sessions.controller.js';
@@ -732,9 +702,7 @@ router.get('/unprotectedLogin',sessionsController.unprotectedLogin);
 router.get('/unprotectedCurrent',sessionsController.unprotectedCurrent);
 
 export default router;
-
-
-
+---------------------------------------------------
 src\routes\users.router.js
 import { Router } from 'express';
 import usersController from '../controllers/users.controller.js';
@@ -923,9 +891,7 @@ router.put('/:uid', usersController.updateUser);
  *         description: Usuario no encontrado
  */
 router.delete('/:uid', usersController.deleteUser);
-
-
-
+---------------------------------------------------
 src\services\index.js
 import Users from "../dao/Users.dao.js";
 import Pet from "../dao/Pets.dao.js";
@@ -939,8 +905,7 @@ export const usersService = new UserRepository(new Users());
 export const petsService = new PetRepository(new Pet());
 export const adoptionsService = new AdoptionRepository(new Adoption());
 
-
-
+---------------------------------------------------
 src\test\supertest.test.js
 import mongoose from 'mongoose';
 import request from 'supertest';
@@ -1045,9 +1010,7 @@ describe('Tests funcionales para la API', function () {
         });
     });
 });
-
-
-
+---------------------------------------------------
 src\utils\index.js
 import bcrypt from 'bcryptjs';
 import {fileURLToPath} from 'url';
@@ -1064,8 +1027,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 export default __dirname;
-
-
+---------------------------------------------------
 src\utils\mockPets.js
 import { faker } from '@faker-js/faker';
 
@@ -1085,9 +1047,7 @@ export const generateMockPets = (numPets) => {
     
     return pets;
 };
-
-
-
+---------------------------------------------------
 src\utils\mockUsers.js
 import { faker } from '@faker-js/faker';
 import { createHash } from './index.js';
@@ -1112,8 +1072,7 @@ export const generateMockUsers = async (numUsers) => {
     return users;
 };
 
-
-
+---------------------------------------------------
 src\utils\swaggerConfig.js
 import swaggerJsDoc  from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
@@ -1140,10 +1099,7 @@ const swaggerDocs = swaggerJsDoc (swaggerOptions);
 export default (app) => {
     app.use('/apidocs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 }
-
-
-
-
+---------------------------------------------------
 src\utils\uploader.js
 import __dirname from "./index.js";
 import multer from 'multer';
@@ -1160,5 +1116,4 @@ const storage = multer.diskStorage({
 const uploader = multer({storage})
 
 export default uploader;
-
 
