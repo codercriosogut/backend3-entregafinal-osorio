@@ -58,6 +58,7 @@ $ npm start
 
 ## .env ##
 - MONGODB_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal?retryWrites=true&w=majority&appName=Cluster0
+- MONGODB_TEST_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal_test?retryWrites=true&w=majority&appName=Cluster0
 - PORT=8080
 - MOCK_USER_PASSWORD=coder123
 #
