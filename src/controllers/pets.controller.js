@@ -12,7 +12,7 @@ const createPet = async(req,res)=> {
     if(!name||!specie||!birthDate) return res.status(400).send({status:"error",error:"Incomplete values"});
     const pet = PetDTO.getPetInputFrom({name,specie,birthDate});
     const result = await petsService.create(pet);
-    res.status(201).send({status:"success",payload:result});  // Cambiado de .send() a .status(201).send()
+    res.status(201).send({status:"success",payload:result});
 }
 
 

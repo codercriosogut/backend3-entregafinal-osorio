@@ -4,20 +4,17 @@ import { expect } from 'chai';
 import app from '../app.js';
 
 describe('Tests funcionales para la API', function () {
-    this.timeout(5000); // Incrementar el tiempo límite si las pruebas tardan más en completarse.
+    this.timeout(5000);
 
-    // Variables para datos de prueba
     let testUserId, testPetId;
 
     before(async function () {
-        // Conexión a la base de datos de prueba
         const isTestEnv = process.env.NODE_ENV === 'test';
         const dbURI = isTestEnv ? process.env.MONGODB_TEST_URI : process.env.MONGODB_URI;
         await mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
     });
 
     after(async function () {
-        // Cerrar la conexión después de las pruebas
         await mongoose.connection.close();
     });
 
@@ -39,7 +36,7 @@ describe('Tests funcionales para la API', function () {
             expect(result.status).to.equal(201);
             expect(result.body).to.have.property('status', 'success');
             expect(result.body.payload).to.be.an('object');
-            testUserId = result.body.payload._id; // Guardar el ID del usuario creado
+            testUserId = result.body.payload._id; 
         });
 
         it('GET /api/users debería obtener todos los usuarios', async function () {
@@ -67,7 +64,7 @@ describe('Tests funcionales para la API', function () {
             expect(result.status).to.equal(201);
             expect(result.body).to.have.property('status', 'success');
             expect(result.body.payload).to.be.an('object');
-            testPetId = result.body.payload._id; // Guardar el ID de la mascota creada
+            testPetId = result.body.payload._id; 
         });
 
         it('GET /api/pets debería obtener todas las mascotas', async function () {
@@ -80,7 +77,7 @@ describe('Tests funcionales para la API', function () {
 
     describe('Rutas de adopciones', function () {
         it('POST /api/adoptions/:uid/:pid debería crear una adopción', async function () {
-            this.timeout(10000); // Incrementamos el timeout para esta prueba
+            this.timeout(10000); 
 
             const result = await request(app)
                 .post(`/api/adoptions/${testUserId}/${testPetId}`)
