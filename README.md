@@ -11,52 +11,72 @@ Proyecto ver.9</h1>
   <a href="#codigo">Código</a> &#xa0; | &#xa0;
   <a href="#rutas">Rutas</a> &#xa0; | &#xa0;
   <a href="#dependencias">Dependencias</a> &#xa0; | &#xa0;
-  <a href="#test">Test</a> &#xa0; | &#xa0; 
+  <a href="#npm">NPM-Start/Test</a> &#xa0; | &#xa0;
+  <a href="#test">Docker</a> &#xa0; | &#xa0; 
+  <a href="#test">Swagger</a> &#xa0; | &#xa0; 
 </p>
 
 <br>
 
-
+#
+#
+#
 ## Descripcion ##
-
-Este proyecto es una API desarrollada con Node.js y Express.js que utiliza @faker-js/faker para generar datos simulados. El objetivo principal es proporcionar rutas para simular grandes volúmenes de datos de usuarios y mascotas, útiles para pruebas y desarrollo.
+Este proyecto es una API para gestionar usuarios, mascotas y adopciones. Permite realizar operaciones CRUD (crear, leer, actualizar y eliminar). Está construida con Node.js y Express, y usa MongoDB como base de datos. La aplicación está orientada a un sistema de adopción de mascotas, donde los usuarios pueden adoptar animales disponibles y gestionarlos.
 
 <a href="#title">Volver al inicio</a>
 
 
+#
+#
+#
 ## Instalacion ##
+Para instalar y ejecutar este proyecto, sigue estos pasos:
 
 ```bash
 # Clonar repositorio:
-$ git clone https://github.com/codercriosogut/backend3-preentrega1osorio.git
+$ git clone https://github.com/codercriosogut/backend3-entregafinal-osorio.git
 
 # Accede al directorio del proyecto:
-$ cd .\backend3-preentrega1osorio\
+$ cd .\backend3-entregafinal-osorio\
 
 # Instala las dependencias:
 $ npm install
 $ npm list
 
 ├── @faker-js/faker@9.2.0
-├── bcrypt@5.1.0
+├── bcryptjs@2.4.3
 ├── chai@4.3.7
 ├── cookie-parser@1.4.6
+├── cross-env@7.0.3
 ├── dotenv@16.4.5
 ├── express@4.18.2
 ├── jsonwebtoken@8.5.1
 ├── mocha@10.1.0
 ├── mongoose@6.7.5
 ├── multer@1.4.5-lts.1
-└── supertest@6.3.3
+├── supertest@6.3.3
+├── swagger-jsdoc@6.2.8
+└── swagger-ui-express@5.0.1
 
 # Ejecuta el servidor
 $ npm start
 
-# Utilizar Postman
+# Utilizar Postman o Swagger
+// Con Swagger y Postman puedes realizar fácilmente pruebas de todas las operaciones CRUD
 ```
 <a href="#title">Volver al inicio</a>
 
+#
+#
+#
 ## .env ##
+Este proyecto requiere las siguientes variables de entorno:
+```env
+MONGODB_URI: URL de la base de datos para producción.
+MONGODB_TEST_URI: URL de la base de datos para pruebas.
+MOCK_USER_PASSWORD: Contraseña por defecto para los usuarios generados.
+```
 - MONGODB_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal?retryWrites=true&w=majority&appName=Cluster0
 - MONGODB_TEST_URI=mongodb+srv://cri2024:cri2024@cluster0.mswsapd.mongodb.net/bkd3_entregafinal_test?retryWrites=true&w=majority&appName=Cluster0
 - PORT=8080
@@ -66,118 +86,199 @@ $ npm start
 
 <a href="#title">Volver al inicio</a>
 
+#
+#
+#
 ## Directorios ##
+
 ```markdown
 📦src
  ┣ 📂controllers
+ ┃ ┣ 📜adoptions.controller.js
+ ┃ ┣ 📜pets.controller.js
+ ┃ ┣ 📜sessions.controller.js
+ ┃ ┗ 📜users.controller.js
  ┣ 📂dao
+ ┃ ┣ 📂models
+ ┃ ┃ ┣ 📜Adoption.js
+ ┃ ┃ ┣ 📜Pet.js
+ ┃ ┃ ┗ 📜User.js
+ ┃ ┣ 📜Adoption.js
+ ┃ ┣ 📜Pets.dao.js
+ ┃ ┗ 📜Users.dao.js
+ ┣ 📂dto
+ ┃ ┣ 📜Pet.dto.js
+ ┃ ┗ 📜User.dto.js
+ ┣ 📂public
+ ┃ ┗ 📂img
  ┣ 📂repository
+ ┃ ┣ 📜AdoptionRepository.js
+ ┃ ┣ 📜GenericRepository.js
+ ┃ ┣ 📜PetRepository.js
+ ┃ ┗ 📜UserRepository.js
  ┣ 📂routes
+ ┃ ┣ 📜adoption.router.js
  ┃ ┣ 📜mocks.router.js
+ ┃ ┣ 📜pets.router.js
+ ┃ ┣ 📜sessions.router.js
+ ┃ ┗ 📜users.router.js
  ┣ 📂services
+ ┃ ┗ 📜index.js
+ ┣ 📂test
+ ┃ ┗ 📜supertest.test.js
  ┣ 📂utils
+ ┃ ┣ 📜index.js
  ┃ ┣ 📜mockPets.js
  ┃ ┣ 📜mockUsers.js
- ┃ ┗ 📜index.js
+ ┃ ┣ 📜swaggerConfig.js
+ ┃ ┗ 📜uploader.js
  ┗ 📜app.js
 ```
 <a href="#title">Volver al inicio</a>
 
+#
+#
+#
 ## Codigo ##
-#### Generación de Datos Simulados: El proyecto utiliza @faker-js/faker para crear datos de prueba:
-- `src/utils/mockPets.js`
-- Genera mascotas con propiedades como name, specie, birthDate, adopted, owner, e image.**
-#
-```javascript
-import { faker } from '@faker-js/faker';
+#### El código de la API está implementado principalmente con Node.js, Express.js y MongoDB. Algunas de las características clave incluyen:
 
-export const generateMockPets = (numPets) => {
-    let pets = [];
-    
-    for (let i = 0; i < numPets; i++) {
-        pets.push({
-            name: faker.person.firstName(),
-            specie: faker.animal.type(),
-            birthDate: faker.date.past(5),
-            adopted: false,
-            owner: null,
-            image: faker.image.url()
-        });
-    }
-    
-    return pets;
-};
-
-```
-
-#
-- `src/utils/mockUsers.js`
-- Genera usuarios con propiedades como first_name, last_name, email, password, role, y pets.
-
-```javascript
-import { faker } from '@faker-js/faker';
-import { createHash } from './index.js';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-export const generateMockUsers = async (numUsers) => {
-    const users = [];
-    const defaultPass = process.env.MOCK_USER_PASSWORD;
-
-    for (let i = 0; i < numUsers; i++) {
-        users.push({
-            first_name: faker.person.firstName(),
-            last_name: faker.person.lastName(),
-            email: faker.internet.email(),
-            password: await createHash(defaultPass),
-            role: Math.random() < 0.5 ? 'user' : 'admin',
-            pets: []
-        });
-    }
-    return users;
-};
-```
+- Uso de Mongoose para interactuar con la base de datos MongoDB.
+- Controladores para gestionar la lógica.
+- Repositorios para acceder a los datos a través de patrones DAO.
+- Uso de bcryptjs para el manejo seguro de contraseñas.
+- Configuración de Swagger para la documentación automática de la API.
 
 <a href="#title">Volver al inicio</a>
 
 #
-
+#
+#
 ## Rutas ## 
-### La API proporciona varias rutas para manejar la generación de datos:
+### Las rutas de la API son las siguientes:
+Usuarios (/api/users):
+- GET /api/users: Obtiene todos los usuarios.
+- POST /api/users: Crea un nuevo usuario.
+- GET /api/users/{uid}: Obtiene un usuario por su ID.
+- PUT /api/users/{uid}: Actualiza un usuario por su ID.
+- DELETE /api/users/{uid}: Elimina un usuario por su ID.
 
-#### La API proporciona varias rutas para manejar la generación de datos: 
-- `GET /api/mocks/mockingpets`: Devuelve una lista de mascotas simuladas.
-- ***Query Params:***: num (opcional), el número de mascotas a generar.
-#
-- `GET /api/mocks/mockingusers`: Devuelve una lista de usuarios simulados.
-- ***Query Params:***: num (opcional), el número de usuarios a generar.
-#
-- `POST /api/mocks/generateData`: Inserta datos simulados de usuarios y mascotas en la base de datos.
-- ***Body Params:***: {"users": 5,"pets": 5}
-#
+Mascotas (/api/pets):
+- GET /api/pets: Obtiene todas las mascotas.
+- POST /api/pets: Crea una nueva mascota.
+- GET /api/pets/{pid}: Obtiene una mascota por su ID.
+
+Adopciones (/api/adoptions):
+- GET /api/adoptions: Obtiene todas las adopciones.
+- POST /api/adoptions/{uid}/{pid}: Crea una adopción de una mascota por un usuario.
+
 <a href="#title">Volver al inicio</a>
 
+#
+#
 #
 ## Dependencias ##
 El proyecto utiliza las siguientes dependencias clave:
 
-- **@faker-js/faker**: Generación de datos falsos.
-- **bcrypt**: Hasheo de contraseñas.
-- **dotenv**: Manejo de variables de entorno.
-- **express**: Framework web.
-- **mongoose**: Modelado de objetos MongoDB.
-#
+- **express**: Framework web para Node.js.
+- **mongoose**: ODM para MongoDB.
+- **bcryptjs**: Librería para encriptar contraseñas.
+- **dotenv**: Gestión de variables de entorno.
+- **swagger-jsdoc**,**swagger-ui-express**: Para documentar la API con Swagger.
+- **multer**: Middleware para manejar archivos subidos.
+- **faker**: Generador de datos falsos (para pruebas).
+- **supertest**,**chai**: Librerías para realizar pruebas funcionales.
+
 <a href="#title">Volver al inicio</a>
 
-##
 #
 #
-## Test ##
+#
+## NPM ##
+#
+1. **`npm start`**:
+   - Este comando inicia la aplicación en el entorno de producción.
+   - Se establece la conexión con la base de datos **MongoDB** en modo producción.
+   - El servidor comienza a ejecutarse en el puerto **8080**.
+
+   Salida esperada:
+
+```bash
+npm start
+
+> dockerizandocristianosorio@1.0.0 start
+> node src/app.js
+
+Conexión a MongoDB establecida en producción
+Servidor corriendo en el puerto 8080
+```
+
+#
+2. **`npm test`**:
+- Este comando ejecuta los **tests funcionales** definidos en el archivo `src/test/supertest.test.js`.
+- La aplicación se ejecuta en el entorno de **test**, estableciendo la conexión con MongoDB en modo test.
+- Se prueban las rutas de la API para las entidades **usuarios**, **mascotas** y **adopciones**, asegurando que las operaciones básicas (crear y obtener) funcionen correctamente.
+
+Salida esperada:
+
+```bash
+npm test
+
+> dockerizandocristianosorio@1.0.0 test
+> cross-env NODE_ENV=test mocha src/test/supertest.test.js
+
+  Tests funcionales para la API
+Conexión a MongoDB establecida en modo test
+
+    Rutas de usuarios
+Servidor corriendo en el puerto 8080
+      ✔ POST /api/users debería crear un usuario (366ms)
+      ✔ GET /api/users debería obtener todos los usuarios (81ms)
+    Rutas de mascotas
+      ✔ POST /api/pets debería crear una mascota (84ms)
+      ✔ GET /api/pets debería obtener todas las mascotas (79ms)
+    Rutas de adopciones
+      ✔ POST /api/adoptions/:uid/:pid debería crear una adopción (381ms)
+      ✔ GET /api/adoptions debería obtener todas las adopciones (76ms)
+
+
+  6 passing (2s)
+```
+#
+3. **`npm run test-app`**:
+- Este comando también ejecuta la aplicación en el entorno de **test**, similar a `npm start`, pero en modo test.
+- La conexión a **MongoDB** se realiza en el entorno de prueba, y el servidor se ejecuta en el puerto **8080**.
+
+Salida esperada:
+
+```bash
+npm run test-app
+
+> dockerizandocristianosorio@1.0.0 test-app
+> cross-env NODE_ENV=test node src/app.js
+
+Conexión a MongoDB establecida en modo test
+Servidor corriendo en el puerto 8080
+```
+
+
+#### Bases de datos - Start:
+<div align="center" id="top">
+    <img src="./src/public/img/db-start.png" alt="businesses" />
+</div>
+
+#
+#### Bases de datos - Test:
+<div align="center" id="top">
+    <img src="./src/public/img/db-test.png" alt="businesses" />
+</div>
+
+#
+#
+#
 ### Generar Mascotas Simuladas
 - **Método**: GET
-- **URL**: `http://localhost:8080/api/mocks/mockingpets?num=5`
-- **Query Params**: num 5
+- **URL**: `http://localhost:8080/api/mocks/mockingpets?num=2`
+- **Query Params**: num 2
 
 #### Respuesta:
 ```json
@@ -185,44 +286,20 @@ El proyecto utiliza las siguientes dependencias clave:
     "status": "success",
     "payload": [
         {
-            "name": "Brennon",
-            "specie": "turtle",
-            "birthDate": "2024-06-27T20:09:37.512Z",
+            "name": "Betsy",
+            "specie": "gecko",
+            "birthDate": "2024-04-22T21:10:00.964Z",
             "adopted": false,
             "owner": null,
-            "image": "https://loremflickr.com/2634/3189?lock=4490057815710945"
+            "image": "https://picsum.photos/seed/sa0ttcvTi/343/2524"
         },
         {
-            "name": "Lucy",
-            "specie": "monkey",
-            "birthDate": "2024-05-27T06:07:14.828Z",
+            "name": "Einar",
+            "specie": "koala",
+            "birthDate": "2024-06-05T11:14:56.549Z",
             "adopted": false,
             "owner": null,
-            "image": "https://loremflickr.com/2847/3244?lock=7579876253003146"
-        },
-        {
-            "name": "Anderson",
-            "specie": "whale",
-            "birthDate": "2024-09-03T12:25:30.334Z",
-            "adopted": false,
-            "owner": null,
-            "image": "https://loremflickr.com/860/3230?lock=5273584123218774"
-        },
-        {
-            "name": "Kara",
-            "specie": "penguin",
-            "birthDate": "2024-07-26T17:08:13.061Z",
-            "adopted": false,
-            "owner": null,
-            "image": "https://loremflickr.com/937/2819?lock=6472656405993971"
-        },
-        {
-            "name": "Elias",
-            "specie": "rabbit",
-            "birthDate": "2024-01-21T03:16:41.770Z",
-            "adopted": false,
-            "owner": null,
-            "image": "https://picsum.photos/seed/QWF6oG/2863/1790"
+            "image": "https://loremflickr.com/2733/3155?lock=7542828475762989"
         }
     ]
 }
@@ -230,9 +307,11 @@ El proyecto utiliza las siguientes dependencias clave:
 
 #### Postman:
 <div align="center" id="top">
-    <img src="./src/public/img/Screenshot_4.png" alt="businesses" />
+    <img src="./src/public/img/mocks-mockingpets.png" alt="businesses" />
 </div>
 
+#
+#
 #
 ### Insertar Datos Simulados en la Base de Datos Mongodb
 ##
@@ -242,28 +321,28 @@ El proyecto utiliza las siguientes dependencias clave:
 #### Enviar:
 ```json
 {
-    "users": 5,
-    "pets": 5 
+    "users": 2,
+    "pets": 2 
 }
 ```
-#### Respuesta POSTMAN:
-```json
-{
-    "status": "success",
-    "message": "5 users and 5 pets inserted into the database"
-}
-```
-#
-#### MongodbAtlas: bkd3_mocks.pets
+#### Postman:
 <div align="center" id="top">
-    <img src="./src/public/img/Screenshot_5.png" alt="pets" />
+    <img src="./src/public/img/mocks-generatedata.png" alt="businesses" />
 </div>
 
 #
 #### MongodbAtlas: bkd3_mocks.users
 <div align="center" id="top">
-    <img src="./src/public/img/Screenshot_1.png" alt="users" />
+    <img src="./src/public/img/mocks-generatedata-mongodb-user.png" alt="users" />
 </div>
+
+#
+#### MongodbAtlas: bkd3_mocks.pets
+<div align="center" id="top">
+    <img src="./src/public/img/mocks-generatedata-mongodb-pets.png" alt="pets" />
+</div>
+
+
 
 #
 #### Decrypt Checker Bcrypt generator:
@@ -273,13 +352,13 @@ El proyecto utiliza las siguientes dependencias clave:
 
 
 <div align="center" id="top">
-    <img src="./src/public/img/Screenshot_2.png" alt="businesses" />
+    <img src="./src/public/img/decrypt1.png" alt="businesses" />
 </div>
 
 #
 
 <div align="center" id="top">
-    <img src="./src/public/img/Screenshot_3.png" alt="businesses" />
+    <img src="./src/public/img/decrypt2.png" alt="businesses" />
 </div>
 
 
@@ -290,28 +369,73 @@ El proyecto utiliza las siguientes dependencias clave:
 ##
 #
 ## Docker ##
+Este proyecto ha sido dockerizado para facilitar su despliegue y garantizar la consistencia del entorno entre desarrollo, prueba y producción. A continuación, se describen los pasos para construir, ejecutar y subir la imagen Docker del proyecto.
 
-### Docker Desktop - Cargar imagen
+1. **Construcción de la Imagen Docker**:
 ```bash
 docker build -t docker_cristian .
+```
+#
+2. **Ejecución del Contenedor Docker**:
+```bash
 docker run -p 8080:8080 docker_cristian
 ```
 #
-### DockerHub - Subir la imagen a dockerhub
+3. **Subida de la Imagen a DockerHub**:
 ```bash
 docker login
 docker tag docker_cristian criosogutdocker/docker_cristian:ver1
 docker push criosogutdocker/docker_cristian:ver1
 ```
 #
-### Public
+### DockerHub - Public
 - https://hub.docker.com/r/criosogutdocker/docker_cristian
 
 
 
 ### Swagger
+La API está documentada automáticamente utilizando Swagger. Para ver la documentación interactiva
 ```bash
 npm install swagger-jsdoc swagger-ui-express
 ```
 
+### Swagger - Acceso Web
+Esto te permitirá explorar las rutas disponibles, así como hacer peticiones directamente desde la interfaz de Swagger.
 
+- http://localhost:8080/apidocs
+
+#
+Acceso Swagger Web
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-web.png" alt="businesses" />
+</div>
+
+#
+Swagger - GET
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-get.png" alt="businesses" />
+</div>
+
+#
+Swagger - POST
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-post.png" alt="businesses" />
+</div>
+
+#
+Swagger - GET
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-get2.png" alt="businesses" />
+</div>
+
+#
+Swagger - PUT
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-put.png" alt="businesses" />
+</div>
+
+#
+Swagger - DELETE
+<div align="center" id="top">
+    <img src="./src/public/img/swagger-delete.png" alt="businesses" />
+</div>
