@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "test": "mocha src/test/supertest.test.js",
+    "test": "cross-env NODE_ENV=test mocha src/test/supertest.test.js",
     "test-app": "cross-env NODE_ENV=test node src/app.js"
   },
   "keywords": [],
