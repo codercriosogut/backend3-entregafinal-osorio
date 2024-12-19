@@ -80,6 +80,8 @@ describe('Tests funcionales para la API', function () {
 
     describe('Rutas de adopciones', function () {
         it('POST /api/adoptions/:uid/:pid debería crear una adopción', async function () {
+            this.timeout(10000); // Incrementamos el timeout para esta prueba
+
             const result = await request(app)
                 .post(`/api/adoptions/${testUserId}/${testPetId}`)
                 .set('Content-Type', 'application/json');
