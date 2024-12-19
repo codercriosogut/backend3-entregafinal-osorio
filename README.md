@@ -12,8 +12,8 @@ Proyecto ver.9</h1>
   <a href="#rutas">Rutas</a> &#xa0; | &#xa0;
   <a href="#dependencias">Dependencias</a> &#xa0; | &#xa0;
   <a href="#npm">NPM-Start/Test</a> &#xa0; | &#xa0;
-  <a href="#test">Docker</a> &#xa0; | &#xa0; 
-  <a href="#test">Swagger</a> &#xa0; | &#xa0; 
+  <a href="#docker">Docker</a> &#xa0; | &#xa0; 
+  <a href="#swagger">Swagger</a> &#xa0; | &#xa0; 
 </p>
 
 <br>
@@ -391,9 +391,13 @@ docker push criosogutdocker/docker_cristian:ver1
 ### DockerHub - Public
 - https://hub.docker.com/r/criosogutdocker/docker_cristian
 
+##
+<a href="#title">Volver al inicio</a>
 
-
-### Swagger
+#
+#
+#
+## Swagger ##
 La API está documentada automáticamente utilizando Swagger. Para ver la documentación interactiva
 ```bash
 npm install swagger-jsdoc swagger-ui-express
@@ -439,3 +443,6 @@ Swagger - DELETE
 <div align="center" id="top">
     <img src="./src/public/img/swagger-delete.png" alt="businesses" />
 </div>
+
+##
+<a href="#title">Volver al inicio</a>
