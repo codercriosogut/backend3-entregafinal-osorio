@@ -15,7 +15,6 @@ Proyecto</h1>
   <a href="#docker">Docker</a> &#xa0; | &#xa0; 
   <a href="#swagger">Swagger</a> &#xa0; | &#xa0; 
 </p>
-
 <br>
 
 #
@@ -25,7 +24,6 @@ Proyecto</h1>
 Este proyecto es una API para gestionar usuarios, mascotas y adopciones. Permite realizar operaciones CRUD (crear, leer, actualizar y eliminar). Está construida con Node.js y Express, y usa MongoDB como base de datos. La aplicación está orientada a un sistema de adopción de mascotas, donde los usuarios pueden adoptar animales disponibles y gestionarlos.
 
 <a href="#title">Volver al inicio</a>
-
 
 #
 #
@@ -194,7 +192,6 @@ El proyecto utiliza las siguientes dependencias clave:
 #
 #
 ## NPM ##
-#
 1. **`npm start`**:
    - Este comando inicia la aplicación en el entorno de producción.
    - Se establece la conexión con la base de datos **MongoDB** en modo producción.
@@ -243,6 +240,7 @@ Servidor corriendo en el puerto 8080
 
   6 passing (2s)
 ```
+
 #
 3. **`npm run test-app`**:
 - Este comando también ejecuta la aplicación en el entorno de **test**, similar a `npm start`, pero en modo test.
@@ -260,14 +258,14 @@ Conexión a MongoDB establecida en modo test
 Servidor corriendo en el puerto 8080
 ```
 
-
-#### Bases de datos - Start:
+#
+4. **Bases de datos - Produccion**:
 <div align="center" id="top">
     <img src="./src/public/img/db-start.png" alt="businesses" />
 </div>
 
 #
-#### Bases de datos - Test:
+5. **Bases de datos - Test**:
 <div align="center" id="top">
     <img src="./src/public/img/db-test.png" alt="businesses" />
 </div>
@@ -330,13 +328,11 @@ Servidor corriendo en el puerto 8080
     <img src="./src/public/img/mocks-generatedata.png" alt="businesses" />
 </div>
 
-#
 #### MongodbAtlas: bkd3_mocks.users
 <div align="center" id="top">
     <img src="./src/public/img/mocks-generatedata-mongodb-user.png" alt="users" />
 </div>
 
-#
 #### MongodbAtlas: bkd3_mocks.pets
 <div align="center" id="top">
     <img src="./src/public/img/mocks-generatedata-mongodb-pets.png" alt="pets" />
@@ -349,24 +345,20 @@ Servidor corriendo en el puerto 8080
 - <a href="https://bcrypt-generator.com/" target="_blank">Generador de hashes bcrypt</a>
 - Este generador es útil para crear contraseñas encriptadas rápidamente y probar funcionalidades relacionadas con la autenticación.
 
-
-
 <div align="center" id="top">
     <img src="./src/public/img/decrypt1.png" alt="businesses" />
 </div>
 
 #
-
 <div align="center" id="top">
     <img src="./src/public/img/decrypt2.png" alt="businesses" />
 </div>
 
-
-
 ##
 <a href="#title">Volver al inicio</a>
 
-##
+#
+#
 #
 ## Docker ##
 Este proyecto ha sido dockerizado para facilitar su despliegue y garantizar la consistencia del entorno entre desarrollo, prueba y producción. A continuación, se describen los pasos para construir, ejecutar y subir la imagen Docker del proyecto.
@@ -376,22 +368,79 @@ Este proyecto ha sido dockerizado para facilitar su despliegue y garantizar la c
 docker build -t docker_cristian .
 ```
 #
+DockerDesktop - Comando Terminal
+<div align="center" id="top">
+    <img src="./src/public/img/docker1.png" alt="businesses" />
+</div>
+
+#
+DockerDesktop - Imagen cargada
+<div align="center" id="top">
+    <img src="./src/public/img/docker2.png" alt="businesses" />
+</div>
+
+#
+DockerDesktop - Run
+<div align="center" id="top">
+    <img src="./src/public/img/docker3.png" alt="businesses" />
+</div>
+
+#
+DockerDesktop - Running
+<div align="center" id="top">
+    <img src="./src/public/img/docker4.png" alt="businesses" />
+</div>
+
+#
+#
+#
 2. **Ejecución del Contenedor Docker**:
 ```bash
 docker run -p 8080:8080 docker_cristian
 ```
+
+DockerDesktop - Docker Run
+<div align="center" id="top">
+    <img src="./src/public/img/docker5.png" alt="businesses" />
+</div>
+
 #
-3. **Subida de la Imagen a DockerHub**:
+DockerDesktop - Test Localhost
+<div align="center" id="top">
+    <img src="./src/public/img/docker6.png" alt="businesses" />
+</div>
+
+#
+3. **Subir la Imagen a DockerHub**:
 ```bash
 docker login
 docker tag docker_cristian criosogutdocker/docker_cristian:ver1
 docker push criosogutdocker/docker_cristian:ver1
 ```
+DockerHub - Subir repositorio imagen docker
+<div align="center" id="top">
+    <img src="./src/public/img/docker7.png" alt="businesses" />
+</div>
+
+#
+DockerHub - Repositorio subido
+<div align="center" id="top">
+    <img src="./src/public/img/docker8.png" alt="businesses" />
+</div>
+
+
+
 #
 ### DockerHub - Public
 - https://hub.docker.com/r/criosogutdocker/docker_cristian
 
-##
+
+DockerHub - Repositorio público
+<div align="center" id="top">
+    <img src="./src/public/img/docker9.png" alt="businesses" />
+</div>
+
+#
 <a href="#title">Volver al inicio</a>
 
 #
